@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FrameShatter Games | Independent Game Studio</title>
+    <title>Deadline City: Zombie Shooter | FrameShatter Games</title>
     
     <!-- BROWSER TAB LOGO (FAVICON) -->
     <link rel="icon" type="image/webp" href="fslogo.webp">
@@ -37,8 +37,13 @@
         }
 
         a {
-            color: inherit;
+            color: var(--accent-red);
             text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
 
         /* --- NAVIGATION --- */
@@ -68,6 +73,7 @@
             font-size: 1.25rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
+            color: var(--text-main);
         }
 
         .brand-logo img {
@@ -89,12 +95,12 @@
             letter-spacing: 1.5px;
             text-transform: uppercase;
             color: var(--text-muted);
-            transition: color 0.2s;
         }
 
         .nav-links a:hover,
         .nav-links a.active {
             color: var(--accent-red);
+            text-decoration: none;
         }
 
         .nav-links .disabled-link {
@@ -102,21 +108,29 @@
             opacity: 0.4;
         }
 
-/* Main Hero Card Outer Wrapper */
-        .hero-card {
+        /* --- MAIN CONTENT CONTAINER --- */
+        .main-container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
             position: relative;
             background-color: #0a0c10;
             border-radius: 12px;
-            overflow: hidden;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            grid-template-columns: 1.2fr 1fr; /* Image left, content right */
             align-items: center;
-            padding: 1rem;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            padding: 0.5rem;
         }
 
-        /* Tech-style Border Overlay */
-        .hero-card::before {
+        /* Fading Red Tech Frame Border */
+        .hero-section::before {
             content: "";
             position: absolute;
             inset: 0;
@@ -124,16 +138,16 @@
             border-radius: 12px;
             pointer-events: none;
             z-index: 10;
-            /* Fades the red border out starting around 50% across to 85% */
-            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 85%);
-            mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 85%);
+            /* Mask fades the red border from left to right */
+            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 85%);
+            mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 85%);
         }
 
-        /* Hero Image Container */
         .hero-banner {
             position: relative;
             width: 100%;
             height: 100%;
+            min-height: 320px;
             border-radius: 8px;
             overflow: hidden;
         }
@@ -145,53 +159,32 @@
             display: block;
         }
 
-        /* Image Gradient Fade Overlay */
+        /* Gradient Overlay on Image */
         @media (min-width: 900px) {
             .hero-banner::after {
                 content: "";
                 position: absolute;
                 top: 0;
                 right: 0;
-                width: 70%; /* Covers the right section */
+                width: 65%;
                 height: 100%;
-                /* Gradient starts LATER: solid clear image until 35%, then smooth fade to background */
-                background: linear-gradient(to right, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0) 35%, #0a0c10 100%);
+                /* Gradient starts LATER so image remains sharp past the zombie */
+                background: linear-gradient(to right, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0) 40%, #0a0c10 100%);
                 pointer-events: none;
             }
         }
 
-        @media (max-width: 899px) {
-            .hero-card {
-                grid-template-columns: 1fr;
-            }
-            .hero-card::before {
-                -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-                mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-            }
-            .hero-banner::after {
-                content: "";
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 60%;
-                background: linear-gradient(to bottom, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0) 30%, #0a0c10 100%);
-                pointer-events: none;
-            }
+        .hero-content {
+            padding: 1.5rem 1.5rem 1.5rem 0;
+            z-index: 2;
         }
 
-        .hero-banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .hero-content h2 {
-            font-size: 0.9rem;
+        .game-subtitle {
+            color: var(--accent-red);
+            font-size: 0.85rem;
+            font-weight: 800;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--accent-red);
             margin-bottom: 0.5rem;
         }
 
@@ -200,70 +193,64 @@
             font-weight: 900;
             line-height: 1.1;
             text-transform: uppercase;
-            margin-bottom: 1rem;
             letter-spacing: 1px;
+            margin-bottom: 1rem;
         }
 
         .hero-content p {
             color: var(--text-muted);
+            font-size: 1rem;
             margin-bottom: 2rem;
-            font-size: 1.05rem;
+            max-width: 480px;
         }
 
-        .cta-buttons {
+        .store-buttons {
             display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .store-btn img {
-            height: 50px;
+            height: 48px;
             width: auto;
             display: block;
-            transition: transform 0.2s ease, opacity 0.2s ease;
+            border-radius: 6px;
+            transition: transform 0.2s ease, filter 0.2s ease;
         }
 
         .store-btn:hover img {
             transform: translateY(-2px);
-            opacity: 0.9;
+            filter: brightness(1.1);
         }
 
-        /* --- FEATURE CARDS --- */
+        /* --- FEATURE CARDS SECTION --- */
         .features-section {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 1.5rem;
+            margin-bottom: 4rem;
         }
 
         .section-title {
             text-align: center;
             font-size: 1.1rem;
-            letter-spacing: 2px;
+            font-weight: 800;
+            letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--text-muted);
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .cards-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .cards-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: border-color 0.2s, transform 0.2s;
+            padding: 1.25rem;
+            transition: border-color 0.2s ease, transform 0.2s ease;
         }
 
         .card:hover {
@@ -273,7 +260,7 @@
 
         .card-image-box {
             width: 100%;
-            height: auto; /* Allows the full image height to display without cropping */
+            height: auto;
             border-radius: 6px;
             overflow: hidden;
             margin-bottom: 1rem;
@@ -283,20 +270,49 @@
         .card-image-box img {
             width: 100%;
             height: auto;
-            object-fit: contain; /* Ensures complete graphic is fully visible */
+            object-fit: contain;
             display: block;
         }
 
         .card h3 {
-            font-size: 1rem;
+            font-size: 1.1rem;
+            font-weight: 800;
             letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 0.5rem;
+            text-align: center;
+            color: var(--text-main);
         }
 
-        .card p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        /* --- RESPONSIVE MOBILE ADJUSTMENTS --- */
+        @media (max-width: 899px) {
+            .hero-section {
+                grid-template-columns: 1fr; /* Stack vertically on small mobile screens */
+                gap: 1rem;
+            }
+
+            .hero-section::before {
+                -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 95%);
+                mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 95%);
+            }
+
+            .hero-banner::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 50%;
+                background: linear-gradient(to bottom, rgba(10, 12, 16, 0) 0%, #0a0c10 100%);
+                pointer-events: none;
+            }
+
+            .hero-content {
+                padding: 1.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
         }
 
         /* --- FOOTER --- */
@@ -316,8 +332,14 @@
             margin-bottom: 1rem;
         }
 
+        .footer-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
         .footer-links a:hover {
             color: var(--accent-red);
+            text-decoration: none;
         }
     </style>
 </head>
@@ -340,29 +362,32 @@
         </div>
     </header>
 
-    <main>
+    <!-- MAIN CONTAINER -->
+    <main class="main-container">
+
         <!-- HERO SECTION -->
         <section class="hero-section">
             <div class="hero-banner">
-                <img src="hero-banner.webp" alt="Deadline City: Zombie Shooter Gameplay">
+                <img src="hero-banner.webp" alt="Deadline City Gameplay Banner">
             </div>
+
             <div class="hero-content">
-                <h2>Deadline City: Zombie Shooter</h2>
+                <div class="game-subtitle">Deadline City: Zombie Shooter</div>
                 <h1>Survive The Infection</h1>
                 <p>An intense 2D side-scrolling survival shooter. Fight through hordes, scavenge supplies, and manage your arsenal to outlast the city collapse.</p>
                 
-                <div class="cta-buttons">
-                    <a href="https://play.google.com/store/apps/details?id=com.frameshattergames.deadlinecity" class="store-btn" target="_blank">
-                        <img src="getonplay.webp" alt="Get it on Google Play">
+                <div class="store-buttons">
+                    <a href="https://play.google.com/store/apps/details?id=com.FrameShatterGames.DeadlineCityZombieShooter" target="_blank" rel="noopener" class="store-btn">
+                        <img src="google-play-badge.png" alt="Get it on Google Play">
                     </a>
-                    <a href="https://www.amazon.com/dp/B0HHL86SBB/" class="store-btn" target="_blank">
-                        <img src="getonamazon.webp" alt="Available on Amazon Appstore">
+                    <a href="#" class="store-btn">
+                        <img src="amazon-appstore-badge.png" alt="Get it on Amazon Appstore">
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- FEATURE CARDS -->
+        <!-- FEATURE CARDS SECTION -->
         <section class="features-section">
             <div class="section-title">Explore The Shattered Universe</div>
             <div class="cards-grid">
@@ -388,6 +413,7 @@
                 </div>
             </div>
         </section>
+
     </main>
 
     <!-- FOOTER -->
