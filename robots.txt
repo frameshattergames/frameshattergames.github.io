@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://frameshattergames.github.io/sitemap.xml
