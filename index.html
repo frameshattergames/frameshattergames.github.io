@@ -44,7 +44,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation; /* Prevents double-tap zoom delay */
+            touch-action: manipulation;
         }
 
         body {
@@ -116,7 +116,7 @@
             border: none;
             cursor: pointer;
             padding: 0;
-            z-index: 105; /* Kept above overlay */
+            z-index: 105;
         }
 
         .menu-toggle span {
@@ -125,6 +125,17 @@
             background-color: var(--text-main);
             border-radius: 2px;
             transition: all 0.3s ease;
+        }
+
+        /* Animated X for open state */
+        .menu-toggle.open span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .menu-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.open span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
         }
 
         .nav-links {
@@ -152,15 +163,15 @@
             opacity: 0.4;
         }
 
-        /* --- LIGHTER BACKDROP OVERLAY --- */
+        /* --- BACKDROP OVERLAY --- */
         .menu-backdrop {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0.4); /* Subtler tint */
-            z-index: 90; /* Placed BEHIND the nav drawer */
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 90;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -343,7 +354,7 @@
             color: var(--text-main);
         }
 
-        /* --- RESPONSIVE MOBILE ADJUSTMENTS --- */
+        /* --- UBISOFT-STYLE MOBILE MENU REDESIGN --- */
         @media (max-width: 899px) {
             .menu-toggle {
                 display: flex;
@@ -351,27 +362,51 @@
 
             .nav-links {
                 position: fixed;
-                top: 0;
-                right: 0;
-                width: 75%;
-                max-width: 300px;
-                height: 100vh;
-                background-color: #12151c;
-                border-left: 1px solid var(--border-color);
+                top: 65px; /* Sits directly under sticky header */
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 65px);
+                background-color: #0d0f14;
                 flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 2.5rem;
-                transform: translateX(100%);
-                transition: transform 0.3s ease-in-out;
-                z-index: 100; /* Placed ABOVE backdrop overlay (90) */
+                justify-content: flex-start;
+                align-items: stretch;
+                gap: 0;
+                padding: 1rem 0;
+                transform: translateY(-100%);
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 100;
                 visibility: hidden;
-                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); /* Crisp shadow on edge */
+                overflow-y: auto;
             }
 
             .nav-links.active {
-                transform: translateX(0);
+                transform: translateY(0);
                 visibility: visible;
+            }
+
+            .nav-links li {
+                width: 100%;
+                border-bottom: 1px solid #1f2330;
+            }
+
+            .nav-links a {
+                display: block;
+                width: 100%;
+                padding: 1.25rem 2rem;
+                font-size: 1.3rem;
+                font-weight: 900;
+                letter-spacing: 2px;
+                text-align: left;
+                color: #ffffff;
+            }
+
+            .nav-links a.active {
+                color: var(--accent-red);
+                background-color: rgba(255, 62, 62, 0.05);
+            }
+
+            .nav-links .disabled-link {
+                color: #4a5060;
             }
 
             .main-container {
@@ -464,11 +499,11 @@
             </button>
 
             <ul class="nav-links" id="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="#" class="disabled-link" title="Coming Soon">Games</a></li>
-                <li><a href="#" class="disabled-link" title="Coming Soon">Devlog</a></li>
-                <li><a href="#" class="disabled-link" title="Coming Soon">Studio</a></li>
-                <li><a href="mailto:frameshattergames@gmail.com">Contact</a></li>
+                <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="#" class="disabled-link" title="Coming Soon">GAMES</a></li>
+                <li><a href="#" class="disabled-link" title="Coming Soon">DEVLOG</a></li>
+                <li><a href="#" class="disabled-link" title="Coming Soon">STUDIO</a></li>
+                <li><a href="mailto:frameshattergames@gmail.com">CONTACT</a></li>
             </ul>
         </div>
     </header>
@@ -547,10 +582,10 @@
         const backdrop = document.getElementById('menu-backdrop');
 
         function toggleMenu() {
+            menuBtn.classList.toggle('open');
             navLinks.classList.toggle('active');
             backdrop.classList.toggle('active');
             
-            // Lock body scrolling when mobile menu is open
             if (navLinks.classList.contains('active')) {
                 document.body.style.overflow = 'hidden';
             } else {
@@ -561,7 +596,6 @@
         menuBtn.addEventListener('click', toggleMenu);
         backdrop.addEventListener('click', toggleMenu);
 
-        // Close menu when clicking any nav link
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 if (navLinks.classList.contains('active')) {
