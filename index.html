@@ -15,7 +15,7 @@
     <meta property="og:url" content="https://frameshattergames.github.io/">
     
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-5.0">
     <title>Deadline City: Zombie Shooter | FrameShatter Games</title>
     
     <!-- BROWSER TAB LOGO (FAVICON) -->
@@ -37,6 +37,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation; /* Prevents double-tap zoom delay */
         }
 
         body {
@@ -47,6 +48,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow-x: hidden;
         }
 
         a {
@@ -87,6 +89,7 @@
             letter-spacing: 1.5px;
             text-transform: uppercase;
             color: var(--text-main);
+            z-index: 101;
         }
 
         .brand-logo img {
@@ -94,6 +97,28 @@
             width: auto;
             object-fit: contain;
             display: block;
+        }
+
+        /* Mobile Hamburger Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 101;
+        }
+
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: all 0.3s ease;
         }
 
         .nav-links {
@@ -135,15 +160,14 @@
             background-color: #0a0c10;
             border-radius: 12px;
             display: grid;
-            grid-template-columns: 1.2fr 1fr; /* Image left, content right */
+            grid-template-columns: 1.2fr 1fr;
             align-items: center;
             gap: 2rem;
             margin-bottom: 4rem;
-            padding: 0; /* CHANGED FROM 0.5rem TO 0 TO REMOVE GAP */
-            overflow: hidden; /* Ensures image corners match the outer border-radius */
+            padding: 0;
+            overflow: hidden;
         }
 
-        /* Fading Red Tech Frame Border */
         .hero-section::before {
             content: "";
             position: absolute;
@@ -152,7 +176,6 @@
             border-radius: 12px;
             pointer-events: none;
             z-index: 10;
-            /* Mask fades the red border from left to right */
             -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 85%);
             mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 85%);
         }
@@ -173,7 +196,6 @@
             display: block;
         }
 
-        /* Gradient Overlay on Image */
         @media (min-width: 900px) {
             .hero-banner::after {
                 content: "";
@@ -182,7 +204,6 @@
                 right: 0;
                 width: 65%;
                 height: 100%;
-                /* Gradient starts LATER so image remains sharp past the zombie */
                 background: linear-gradient(to right, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0) 75%, #0a0c10 100%);
                 pointer-events: none;
             }
@@ -203,7 +224,7 @@
         }
 
         .hero-content h1 {
-            font-size: 2.8rem;
+            font-size: clamp(2rem, 5vw, 2.8rem); /* Responsive fluid typography */
             font-weight: 900;
             line-height: 1.1;
             text-transform: uppercase;
@@ -299,9 +320,42 @@
 
         /* --- RESPONSIVE MOBILE ADJUSTMENTS --- */
         @media (max-width: 899px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 75%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: #12151c;
+                border-left: 1px solid var(--border-color);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2.5rem;
+                transition: right 0.3s ease-in-out;
+                z-index: 100;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .main-container {
+                margin: 1.5rem auto;
+            }
+
             .hero-section {
-                grid-template-columns: 1fr; /* Stack vertically on small mobile screens */
+                grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+
+            .hero-banner {
+                min-height: 220px;
             }
 
             .hero-section::before {
@@ -321,11 +375,15 @@
             }
 
             .hero-content {
-                padding: 1.5rem;
+                padding: 1rem 1.25rem 1.5rem;
             }
 
-            .hero-content h1 {
-                font-size: 2.2rem;
+            .store-buttons {
+                justify-content: center;
+            }
+
+            .store-btn img {
+                height: 52px; /* Slightly larger tap target on mobile */
             }
         }
 
@@ -344,11 +402,13 @@
             justify-content: center;
             gap: 1.5rem;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .footer-links a {
             color: var(--text-muted);
             font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
         }
 
         .footer-links a:hover {
@@ -366,7 +426,15 @@
                 <img src="fslogo.webp" alt="FrameShatter Games Logo">
                 <span>FrameShatter <span style="color: var(--accent-red);">Games</span></span>
             </a>
-            <ul class="nav-links">
+
+            <!-- Mobile Hamburger Button -->
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="#" class="disabled-link" title="Coming Soon">Games</a></li>
                 <li><a href="#" class="disabled-link" title="Coming Soon">Devlog</a></li>
@@ -440,5 +508,21 @@
         <p>&copy; 2026 FrameShatter Games. All rights reserved.</p>
     </footer>
 
+    <!-- MOBILE MENU SCRIPT -->
+    <script>
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile drawer when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
