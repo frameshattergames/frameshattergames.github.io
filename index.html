@@ -95,7 +95,7 @@
             letter-spacing: 1.5px;
             text-transform: uppercase;
             color: var(--text-main);
-            z-index: 101;
+            z-index: 105;
         }
 
         .brand-logo img {
@@ -116,7 +116,7 @@
             border: none;
             cursor: pointer;
             padding: 0;
-            z-index: 102;
+            z-index: 105; /* Kept above overlay */
         }
 
         .menu-toggle span {
@@ -152,16 +152,15 @@
             opacity: 0.4;
         }
 
-        /* --- BACKDROP OVERLAY --- */
+        /* --- LIGHTER BACKDROP OVERLAY --- */
         .menu-backdrop {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            z-index: 100;
+            background-color: rgba(0, 0, 0, 0.4); /* Subtler tint */
+            z-index: 90; /* Placed BEHIND the nav drawer */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -363,10 +362,11 @@
                 justify-content: center;
                 align-items: center;
                 gap: 2.5rem;
-                transform: translateX(100%); /* Off-screen via transform */
+                transform: translateX(100%);
                 transition: transform 0.3s ease-in-out;
-                z-index: 101;
+                z-index: 100; /* Placed ABOVE backdrop overlay (90) */
                 visibility: hidden;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); /* Crisp shadow on edge */
             }
 
             .nav-links.active {
