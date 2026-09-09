@@ -102,56 +102,80 @@
             opacity: 0.4;
         }
 
-        /* --- HERO SECTION --- */
-        .hero-section {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
+/* Main Hero Card Outer Wrapper */
+        .hero-card {
+            position: relative;
+            background-color: #0a0c10;
+            border-radius: 12px;
+            overflow: hidden;
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
+            align-items: center;
+            padding: 1rem;
         }
 
-        @media (min-width: 900px) {
-            .hero-section {
-                grid-template-columns: 1.2fr 1fr;
-                align-items: center;
-            }
+        /* Tech-style Border Overlay */
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 2px solid var(--accent-red);
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 10;
+            /* Fades the red border out starting around 50% across to 85% */
+            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 85%);
+            mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 85%);
         }
 
-            .hero-banner {
-                position: relative;
-                background-color: transparent;
-                border: none; /* Removed the hard border so the image blends seamlessly */
-                border-radius: 8px;
-                overflow: hidden;
-                aspect-ratio: 16 / 9;
+        /* Hero Image Container */
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        /* Stronger Gradient Blend into Page Background */
+        .hero-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Image Gradient Fade Overlay */
         @media (min-width: 900px) {
             .hero-banner::after {
                 content: "";
                 position: absolute;
                 top: 0;
                 right: 0;
-                width: 60%; /* Increased width so the gradient covers more area */
+                width: 70%; /* Covers the right section */
                 height: 100%;
-                /* Fades to #0a0c10 (your main background) */
-                background: linear-gradient(to right, rgba(10, 12, 16, 0) 0%, #0a0c10 100%);
+                /* Gradient starts LATER: solid clear image until 35%, then smooth fade to background */
+                background: linear-gradient(to right, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0) 35%, #0a0c10 100%);
                 pointer-events: none;
             }
         }
 
         @media (max-width: 899px) {
+            .hero-card {
+                grid-template-columns: 1fr;
+            }
+            .hero-card::before {
+                -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+                mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+            }
             .hero-banner::after {
                 content: "";
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                height: 50%;
-                background: linear-gradient(to bottom, rgba(10, 12, 16, 0) 0%, #0a0c10 100%);
+                height: 60%;
+                background: linear-gradient(to bottom, rgba(10, 12, 16, 0) 0%, rgba(10, 12, 16, 0) 30%, #0a0c10 100%);
                 pointer-events: none;
             }
         }
