@@ -15,7 +15,7 @@
     <meta property="og:url" content="https://frameshattergames.github.io/">
     
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Deadline City: Zombie Shooter | FrameShatter Games</title>
     
     <!-- BROWSER TAB LOGO (FAVICON) -->
@@ -30,6 +30,13 @@
             --border-color: #242836;
             --text-main: #f0f2f5;
             --text-muted: #8a91a0;
+        }
+
+        /* Prevent horizontal scroll globally */
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         * {
@@ -48,7 +55,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            overflow-x: hidden;
         }
 
         a {
@@ -110,7 +116,7 @@
             border: none;
             cursor: pointer;
             padding: 0;
-            z-index: 101;
+            z-index: 102;
         }
 
         .menu-toggle span {
@@ -144,6 +150,26 @@
         .nav-links .disabled-link {
             cursor: not-allowed;
             opacity: 0.4;
+        }
+
+        /* --- BACKDROP OVERLAY --- */
+        .menu-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .menu-backdrop.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* --- MAIN CONTENT CONTAINER --- */
@@ -224,7 +250,7 @@
         }
 
         .hero-content h1 {
-            font-size: clamp(2rem, 5vw, 2.8rem); /* Responsive fluid typography */
+            font-size: clamp(2rem, 5vw, 2.8rem);
             font-weight: 900;
             line-height: 1.1;
             text-transform: uppercase;
@@ -327,7 +353,7 @@
             .nav-links {
                 position: fixed;
                 top: 0;
-                right: -100%;
+                right: 0;
                 width: 75%;
                 max-width: 300px;
                 height: 100vh;
@@ -337,12 +363,15 @@
                 justify-content: center;
                 align-items: center;
                 gap: 2.5rem;
-                transition: right 0.3s ease-in-out;
-                z-index: 100;
+                transform: translateX(100%); /* Off-screen via transform */
+                transition: transform 0.3s ease-in-out;
+                z-index: 101;
+                visibility: hidden;
             }
 
             .nav-links.active {
-                right: 0;
+                transform: translateX(0);
+                visibility: visible;
             }
 
             .main-container {
@@ -383,7 +412,7 @@
             }
 
             .store-btn img {
-                height: 52px; /* Slightly larger tap target on mobile */
+                height: 52px;
             }
         }
 
@@ -444,6 +473,9 @@
         </div>
     </header>
 
+    <!-- BACKDROP OVERLAY FOR MOBILE MENU -->
+    <div class="menu-backdrop" id="menu-backdrop"></div>
+
     <!-- MAIN CONTAINER -->
     <main class="main-container">
 
@@ -462,7 +494,7 @@
                     <a href="https://play.google.com/store/apps/details?id=com.frameshattergames.deadlinecity" target="_blank" rel="noopener" class="store-btn">
                         <img src="getonplay.webp" alt="Get it on Google Play">
                     </a>
-                    <a href="https://www.amazon.com/dp/B0HHL86SBB/" class="store-btn" target="_blank">
+                    <a href="https://www.amazon.com/dp/B0HHL86SBB/" class="store-btn" target="_blank" rel="noopener">
                         <img src="getonamazon.webp" alt="Get it on Amazon Appstore">
                     </a>
                 </div>
@@ -512,16 +544,30 @@
     <script>
         const menuBtn = document.getElementById('mobile-menu-btn');
         const navLinks = document.getElementById('nav-links');
+        const backdrop = document.getElementById('menu-backdrop');
 
-        menuBtn.addEventListener('click', () => {
+        function toggleMenu() {
             navLinks.classList.toggle('active');
-        });
-
-        // Close mobile drawer when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!menuBtn.contains(e.target) && !navLinks.contains(e.target)) {
-                navLinks.classList.remove('active');
+            backdrop.classList.toggle('active');
+            
+            // Lock body scrolling when mobile menu is open
+            if (navLinks.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
             }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        backdrop.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking any nav link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
         });
     </script>
 </body>
