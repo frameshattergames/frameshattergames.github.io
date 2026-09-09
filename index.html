@@ -119,14 +119,43 @@
             }
         }
 
-        .hero-banner {
-            position: relative;
-            background-color: var(--card-bg);
-            border: 2px solid var(--accent-red);
-            border-radius: 8px;
-            overflow: hidden;
-            aspect-ratio: 16 / 9;
-            box-shadow: 0 0 25px rgba(255, 62, 62, 0.15);
+            .hero-banner {
+                position: relative;
+                background-color: var(--card-bg);
+                border: 2px solid var(--accent-red);
+                border-radius: 8px;
+                overflow: hidden;
+                aspect-ratio: 16 / 9;
+                box-shadow: 0 0 25px rgba(255, 62, 62, 0.15);
+        }
+
+        /* --- GRADIENT OVERLAY FADE --- */
+        /* Desktop: Fades the right side of the image into the page background */
+        @media (min-width: 900px) {
+            .hero-banner::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 45%; /* Controls how wide the fade area is */
+                height: 100%;
+                background: linear-gradient(to right, rgba(10, 12, 16, 0) 0%, var(--bg-dark) 100%);
+                pointer-events: none; /* Allows clicking through if needed */
+            }
+        }
+
+        /* Mobile: Fades the bottom edge into the text block below */
+        @media (max-width: 899px) {
+            .hero-banner::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 40%; /* Controls vertical fade height on mobile */
+                background: linear-gradient(to bottom, rgba(10, 12, 16, 0) 0%, var(--bg-dark) 100%);
+                pointer-events: none;
+            }
         }
 
         .hero-banner img {
